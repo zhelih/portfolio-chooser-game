@@ -69,3 +69,29 @@ module Geometric : Distribution =
       done;
       !res /. (1.-.(cdf c))
  end
+
+ (* exotic *)
+ module Cantor : Distribution =
+  struct
+    let name = "Cantor"
+    let expectation = 0.5
+    let cdf x = if x < 0. then 0. else if x > 1. then 1. else Numeric.cantor_func x 1_000
+    let next () =
+      let u = Random.float 1. in
+      let bits = Numeric.float_to_bits u in
+      let cs = List.mapi (fun i b -> if b = 0 then 0. else 2.*.(Float.pow 3. (-.(float i)-.1.))) bits in
+      List.fold_left (+.) 0. cs
+
+    let cex_gr_c c =
+      (* EL: a bit tricky here *)
+      (* idea: E[X | X>c] CDF is P(X<=x|X>c)=(F(x)-F(c))/(1-F(c)) *)
+      (* since X1{X>c} still positive, use EY = integral from 0 to infty (1-F_Y(u)) du *)
+      if c >= 1. then 1. else (* can raise too, but 0 works ok with CDF mult in strategies.ml *)
+      if c <= 0. then 0.5 else begin
+        let cdf_c = cdf c in
+        let f x =
+          if x <= c then 1. else (1. -. (cdf x)) /. (1. -. cdf_c)
+        in
+        Numeric.integrate 0. 10. f
+      end
+  end

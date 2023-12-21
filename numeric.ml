@@ -13,3 +13,24 @@ let integrate a b f =
   | hd::tl -> loop tl hd (sum +. ((hd+.fk)/.2.*.step))
   in
   loop fs f_a 0.
+
+let float_to_bits f =
+  let base = 2 in
+  let rec loop n res =
+    if List.length res >= 20 then res else begin
+      let n2 = n*.2. in
+      if n2 >= 1. then
+        loop (n2-.1.) (1::res)
+      else
+        loop n2 (0::res)
+    end
+  in
+  List.rev @@ loop f []
+
+let rec cantor_func x n =
+  let one_thrd = 1./.3. and two_thrd = 2./.3. in
+  match n with
+  | 0 -> x
+  | _ when x > one_thrd && x < two_thrd -> 0.5
+  | n when x < one_thrd -> 0.5*.(cantor_func (3.*.x) (n-1)) (*TODO tail *)
+  | n -> 0.5+.0.5*.(cantor_func (3.*.x-.2.) (n-1))

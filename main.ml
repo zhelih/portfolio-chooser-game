@@ -43,6 +43,7 @@ module UniformRun = Run(Distributions.Uniform)
 module NormalRun = Run(Distributions.Normal)
 module ExponentialRun = Run(Distributions.Exponential)
 module GeometricRun = Run(Distributions.Geometric)
+module CantorRun = Run(Distributions.Cantor)
 
 let () =
   print_endline "Enter N:";
@@ -54,6 +55,7 @@ let () =
   print_endline "2. Normal N(0,1)";
   print_endline "3. Exponential Exp(1)";
   print_endline "4. Geometric Geom(1)";
+  print_endline "5. Cantor";
   print_endline "Select:";
   let d = read_int () in
   Random.self_init();
@@ -62,4 +64,5 @@ let () =
   | 2 -> NormalRun.run n m; ()
   | 3 -> ExponentialRun.run n m; ()
   | 4 -> GeometricRun.run n m; ()
+  | 5 -> CantorRun.run n m; ()
   | _ -> print_endline "Unknown solver"

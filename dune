@@ -1,0 +1,5 @@
+(env (_ (flags :standard -w -26-39-33)))
+
+(executable
+  (name main)
+)

@@ -78,8 +78,8 @@ module Geometric : Distribution =
     let cdf x = if x < 0. then 0. else if x > 1. then 1. else Numeric.cantor_func x 1_000
     let next () =
       let u = Random.float 1. in
-      let bits = Numeric.float_to_bits u in
-      let cs = List.mapi (fun i b -> if b = 0 then 0. else 2.*.(Float.pow 3. (-.(float i)-.1.))) bits in
+      let bits = Numeric.bin_digits_of_float u in
+      let cs = List.mapi (fun i b -> if b = 0 then 0. else 2.*.(Float.pow 3. (-.(float @@ i+1)))) bits in
       List.fold_left (+.) 0. cs
 
     let cex_gr_c c =

@@ -5,16 +5,15 @@ let integrate a b f =
   let n = 1_000 in
   let step = (b-.a) /. (float n) in
   let xs = List.rev @@ List.init n (fun i -> b-.((float i)*.step)) in
-  let f_a = f a in (* needed to nicely fold everything and avoid any numerical inconsitencies later *)
   let fs = List.map f xs in
   let rec loop l fk sum =
   match l with
   | [] -> sum
   | hd::tl -> loop tl hd (sum +. ((hd+.fk)/.2.*.step))
   in
-  loop fs f_a 0.
+  loop fs (f a) 0.
 
-let float_to_bits f =
+let bin_digits_of_float num  =
   let base = 2 in
   let rec loop n res =
     if List.length res >= 20 then res else begin
@@ -25,7 +24,7 @@ let float_to_bits f =
         loop n2 (0::res)
     end
   in
-  List.rev @@ loop f []
+  List.rev @@ loop num []
 
 let rec cantor_func x n =
   let one_thrd = 1./.3. and two_thrd = 2./.3. in
